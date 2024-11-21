@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "${BACKEND_PORT:-8000}:${BACKEND_PORT:-8000}"
+    env_file:
+      - .env
+    environment:
+      - PORT=${BACKEND_PORT}
+      - DATABASE_URL=${DATABASE_URL}
+    depends_on:
+      - postgres
+  frontend:
+    build: ./frontend
+    ports:
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    env_file:
+      - .env
+    environment:
+      - PORT=${FRONTEND_PORT}
+  postgres:
+    image: postgres
+    container_name: postgres
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    environment:
+      POSTGRES_USER: "${DATABASE_USER}"
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: "${DATABASE_DATABASE}"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
