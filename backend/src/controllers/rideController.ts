@@ -7,7 +7,33 @@ const rideService = new RideService();
 class RideController {
 
     async estimateRide(req: Request, res: Response) {
+        try {
+            const { customer_id, origin, destination } = req.body;
 
+            if (!customer_id || !origin || !destination) {
+                return res.status(400).json({
+                    error_code: "INVALID_DATA",
+                    error_description: "Os campos de ID de usuário, Origem e Destino são obrigatórios.",
+                });
+            }
+
+            if (origin === destination) {
+                return res.status(400).json({
+                    error_code: "INVALID_DATA",
+                    error_description: "Os endereços de Origem e Destino não podem ser iguais.",
+                });
+            }
+
+            const estimate = await rideService.estimateRide(customer_id, origin, destination);
+
+            return res.status(200).json(estimate);
+        } catch (error: any) {
+            console.error('Erro na execução: ', error);
+            res.status(500).json({
+                error_code: "INTERNAL_SERVER_ERROR",
+                error_description: "Erro ao calcular a estimação de rota",
+            });
+        }
     }
 
     async confirmRide(req: Request, res: Response) {

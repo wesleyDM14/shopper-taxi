@@ -13,8 +13,11 @@ RUN yarn install
 # Copiando o restante dos arquivos
 COPY . .
 
-# Expondo a porta que o backend vai rodar
-EXPOSE $PORT
+# Gera o Prisma Client e aplica as migrações
+RUN npx prisma generate
 
-# Comando para rodar o backend
-CMD ["yarn", "dev"]
+# Expondo a porta que o backend vai rodar
+EXPOSE 8080
+
+# Comando para iniciar o servidor
+CMD ["yarn", "start"]

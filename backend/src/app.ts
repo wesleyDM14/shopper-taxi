@@ -1,10 +1,9 @@
 import express from 'express';
-import dotenv from 'dotenv';
 import router from './routes/rideRoutes';
+import dotenv from 'dotenv';
 
 dotenv.config({ path: '../.env' });
-
-const PORT = process.env.BACKEND_PORT || 8000;
+const PORT = process.env.BACKEND_PORT || 3333;
 
 const app = express();
 app.use(express.json());
