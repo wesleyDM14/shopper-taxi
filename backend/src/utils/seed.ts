@@ -12,13 +12,22 @@ async function seed() {
         const createdDriver = await prismaClient.driver.upsert({
             where: { id: driver.id },
             update: {},
-            create: driver,
+            create: {
+                id: driver.id,
+                nome: driver.nome,
+                descricao: driver.descricao,
+                carro: driver.carro,
+                taxa: driver.taxa,
+                km_min: driver.km_min,
+            },
         });
+
+        const [rating, comment] = driver.avaliacao.split('\n');
 
         await prismaClient.avaliation.create({
             data: {
-                rating: parseInt(driver.avaliacao.split('/')[0].trim()),
-                comment: driver.avaliacao.split('\n')[1],
+                rating: parseInt(rating.split('/')[0].trim()),
+                comment: comment,
                 driverId: createdDriver.id,
             },
         });
