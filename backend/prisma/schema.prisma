@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://postgres:postgres@localhost:5432/shopper_taxi"
 }
 
 model Driver {
@@ -18,11 +18,11 @@ model Driver {
   nome      String
   descricao String
   carro     String
-  avaliacao String
   taxa      Float
   km_min    Int
 
-  rides Ride[]
+  rides       Ride[]
+  avaliations Avaliation[]
 }
 
 model Ride {
@@ -34,6 +34,15 @@ model Ride {
   duration    String
   value       Float
   date        DateTime @default(now())
+
+  driverId Int
+  driver   Driver @relation(fields: [driverId], references: [id], onDelete: Cascade)
+}
+
+model Avaliation {
+  id      Int    @id @default(autoincrement())
+  rating  Int
+  comment String
 
   driverId Int
   driver   Driver @relation(fields: [driverId], references: [id], onDelete: Cascade)
