@@ -1,3 +1,4 @@
+import { error } from "console";
 import { getGoogleApiRoute } from "../utils/getGoogleRoute";
 import prismaClient from "../utils/prismaClientProvider";
 
@@ -116,15 +117,67 @@ class RideService {
         };
     }
 
-    async confirmRide() {
+    async confirmRide(customer_id: string, origin: string, destination: string, distance: number, duration: string, driver_id: number, driver_name: string, value: number) {
 
+        const driver = await prismaClient.driver.findFirst({
+            where: {
+                AND: [
+                    { id: driver_id },
+                    { nome: driver_name },
+                ],
+            }
+        });
+
+        if (!driver) {
+            throw {
+                error_status: 404,
+                error_code: "DRIVER_NOT_FOUND",
+                error_description: "Motorista não encontrado",
+            }
+        }
+
+        if (distance < driver.km_min) {
+            throw {
+                error_status: 406,
+                error_code: "INVALID_DISTANCE",
+                error_description: "Quilometragem inválida para o motorista"
+            }
+        }
+
+        const newRide = await prismaClient.ride.create({
+            data: {
+                customerId: customer_id,
+                origin: origin,
+                destination: destination,
+                distance: distance,
+                duration: duration,
+                driverId: driver.id,
+                value: value,
+            },
+        });
+
+        return { sucess: true };
     }
 
     async getRidesByCustomer(customer_id: string, driver_id?: number) {
+
+        if (driver_id !== undefined) {
+            const driverExist = await prismaClient.driver.findUnique({
+                where: { id: driver_id },
+            });
+
+            if (!driverExist) {
+                throw {
+                    error_code: "INVALID_DRIVER",
+                    error_description: "Motorista invalido"
+                }
+            }
+        }
+
         return await prismaClient.ride.findMany({
             where: {
                 customerId: customer_id,
-                ...(driver_id !== undefined ? { driver_id: driver_id } : {}),
+                ...(driver_id !== undefined ? { driverId: driver_id } : {}),
             },
             orderBy: {
                 date: 'desc'
@@ -135,6 +188,7 @@ class RideService {
                 origin: true,
                 destination: true,
                 distance: true,
+                value: true,
                 driver: {
                     select: {
                         id: true,
@@ -143,7 +197,7 @@ class RideService {
                 },
             },
         });
-    };
+    }
 }
 
 export default RideService;
