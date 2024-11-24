@@ -29,7 +29,12 @@ class RideController {
             return res.status(200).json(estimate);
         } catch (error: any) {
             console.error('Erro na execução: ', error);
-            res.status(500).json({
+
+            if(error.error_code && error.error_description) {
+                return res.status(400).json(error);
+            }
+
+            return res.status(500).json({
                 error_code: "INTERNAL_SERVER_ERROR",
                 error_description: "Erro ao calcular a estimação de rota",
             });
@@ -74,7 +79,7 @@ class RideController {
             });
 
         } catch (error) {
-            res.status(500).json({
+            return res.status(500).json({
                 error_code: "INTERNAL_SERVER_ERROR",
                 error_description: "Erro ao processar a solicitação",
                 details: error,

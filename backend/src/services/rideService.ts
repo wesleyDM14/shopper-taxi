@@ -24,19 +24,19 @@ class RideService {
                     where: {
                         km_min: {
                             lte: distance / 1000,
-                        }
+                        },
                     },
                     orderBy: {
-                        taxa: "asc"
+                        taxa: "asc",
                     },
                     include: {
                         avaliations: {
                             select: {
                                 rating: true,
                                 comment: true,
-                            }
-                        }
-                    }
+                            },
+                        },
+                    },
                 });
 
                 const formatDriversResponse = estimateDrivers.map((driver) => ({
@@ -46,7 +46,7 @@ class RideService {
                     vehicle: driver.carro,
                     review: {
                         rating: driver.avaliations[0].rating,
-                        comment: driver.avaliations[0].comment
+                        comment: driver.avaliations[0].comment,
                     },
                     value: parseFloat((driver.taxa * (distance / 1000)).toFixed(2)),
                 }));
@@ -63,15 +63,57 @@ class RideService {
                     distance: distance,
                     duration: duration,
                     options: formatDriversResponse,
-                    routeResponse: googleApiResponse
-                }
+                    routeResponse: googleApiResponse,
+                };
 
                 return response;
 
+            case "NOT_FOUND":
+                throw {
+                    error_code: "NOT_FOUND",
+                    error_description: "Um, os dois locais, de origem e destino, não foi encontrado pela API.",
+                };
+            case "ZERO_RESULTS":
+                throw {
+                    error_code: "ZERO_RESULTS",
+                    error_description: "Nenhuma rota encontrada entre a origem e destino informado.",
+                };
+            case "MAX_WAYPOINTS_EXCEEDED":
+                throw {
+                    error_code: "MAX_WAYPOINTS_EXCEEDED",
+                    error_description: "A rota solicitada é muito longa para ser processada.",
+                };
+            case "INVALID_REQUEST":
+                throw {
+                    error_code: "INVALID_REQUEST",
+                    error_description: "Solicitação inválida. Verifique os parâmetros da url da requisição.",
+                };
+            case "OVER_DAILY_LIMIT":
+                throw {
+                    error_code: "OVER_DAILY_LIMIT",
+                    error_description: "A chave da api esta inválida ou a conta do Google Cloud excedeu o limite diário de uso",
+                };
+            case "OVER_QUERY_LIMIT":
+                throw {
+                    error_code: "OVER_QUERY_LIMIT",
+                    error_description: "O limite de requisições diárias da API foi excedido.",
+                };
+            case "REQUEST_DENIED":
+                throw {
+                    error_code: "REQUEST_DENIED",
+                    error_description: "Uso da api foi negado. Verifique as configurações da chave API no google cloud.",
+                };
+            case "UNKNOWN_ERROR":
+                throw {
+                    error_code: "UNKNOWN_ERROR",
+                    error_description: "A solicitação falhou devido à um erro interno do servidor google.",
+                };
             default:
-                break;
-        }
-        return googleApiResponse;
+                throw {
+                    error_code: "UNHANDLED_STATUS",
+                    error_description: `Um status inesperado foi retornado pela API: ${googleApiResponse.status}`,
+                };
+        };
     }
 
     async confirmRide() {
@@ -101,7 +143,7 @@ class RideService {
                 },
             },
         });
-    }
+    };
 }
 
 export default RideService;
