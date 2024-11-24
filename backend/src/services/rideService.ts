@@ -21,6 +21,13 @@ class RideService {
                 let destinationLat = routeStats.end_location.lat;
                 let destinationLng = routeStats.end_location.lng;
 
+                if (originLat === destinationLat && originLng === destinationLng) {
+                    throw {
+                        error_code: "INVALID_DATA",
+                        error_description: "Os dados fornecidos no corpo da requisição são inválidos",
+                    }
+                }
+
                 const estimateDrivers = await prismaClient.driver.findMany({
                     where: {
                         km_min: {
