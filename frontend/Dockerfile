@@ -1,5 +1,5 @@
 # Imagem base para o frontend (Node.js)
-FROM node:22
+FROM node:22 as build
 
 # Definindo o diretório de trabalho dentro do container
 WORKDIR /app
@@ -13,8 +13,17 @@ RUN yarn install
 # Copiando o restante dos arquivos
 COPY . .
 
-# Expondo a porta que o frontend vai rodar
-EXPOSE $PORT
+# Roda a build do React
+RUN yarn build
 
-# Comando para rodar o frontend
-CMD ["yarn", "start"]
+# servidor nginx para arquivos estaticos
+FROM nginx:alpine
+
+# Copia os arquivos buildados para o servidor nginx
+COPY --from=build /app/build /usr/share/nginx/html
+
+# Expondo a porta que o frontend vai rodar
+EXPOSE 80
+
+# Comando para iniciar o nginx
+CMD ["nginx", "-g", "daemon off;"]
