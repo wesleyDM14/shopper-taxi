@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface EstimateRideFormValues {
     customer_id: string,
     origin: string,
@@ -40,4 +42,19 @@ export interface RouteData {
     duration: string;
     options: DriverOption[];
     routeResponse: RouteResponse;
+}
+
+export interface MainLayoutProps {
+    children: React.ReactNode;
+}
+
+export interface NavbarProps {
+    openSidebar: () => void;
+    navigate: (path: string) => void;
+}
+
+export interface SidebarProps {
+    sidebarOpen: boolean;
+    closeSidebar: () => void;
+    navigate: (path: string) => void;
 }

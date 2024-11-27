@@ -5,6 +5,7 @@ import Theme from "./styles/Theme";
 
 import Estimate from "./pages/Estimate";
 import History from "./pages/History";
+import MainLayout from "./layouts/MainLayout";
 
 const App = () => {
   return (
@@ -12,8 +13,8 @@ const App = () => {
       <GlobalStyle />
       <Router>
         <Routes>
-          <Route path="/" element={<Estimate />} />
-          <Route path="/history" element={<History />} />
+          <Route path="/" element={<MainLayout><Estimate /></MainLayout>} />
+          <Route path="/history" element={<MainLayout><History /></MainLayout>} />
         </Routes>
       </Router>
     </Theme>

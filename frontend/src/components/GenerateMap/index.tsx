@@ -31,6 +31,7 @@ const GenerateMap: React.FC<{ routeData: RouteData }> = ({ routeData }) => {
                 map: map,
                 label: "A",
                 title: "Origem",
+
             });
             markersRef.current.push(originMarker);
 
@@ -57,7 +58,7 @@ const GenerateMap: React.FC<{ routeData: RouteData }> = ({ routeData }) => {
                 geodesic: true,
                 strokeColor: '#FF0000',
                 strokeOpacity: 1.0,
-                strokeWeight: 2,
+                strokeWeight: 5,
             });
 
             newPolyline.setMap(map);
@@ -83,13 +84,12 @@ const GenerateMap: React.FC<{ routeData: RouteData }> = ({ routeData }) => {
         <div style={{ height: '400px', width: '100%' }}>
             <GoogleMap
                 ref={mapRef}
-                mapContainerStyle={{ height: '400px', width: '100%' }}
+                mapContainerStyle={{ height: '87vh', width: '100%' }}
                 center={{
                     lat: (routeData.origin.latitude + routeData.destination.latitude) / 2,
                     lng: (routeData.origin.longitude + routeData.destination.longitude) / 2,
                 }}
                 zoom={10}
-                
                 onLoad={(mapInstance) => setMap(mapInstance)}
             >
             </GoogleMap>

@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const FormTextInput = styled.input`
     display: inline-flex;
     justify-content: flex-start;
-    width: 95%;
+    width: 90%;
     background-color: ${props => props.theme.colors.primary};
     border-radius: 4px;
     color: ${props => props.theme.colors.dark};
