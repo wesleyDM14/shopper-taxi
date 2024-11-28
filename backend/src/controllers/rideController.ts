@@ -43,23 +43,23 @@ class RideController {
 
     async confirmRide(req: Request, res: Response) {
         try {
-            const { customer_id, origin, destination, distance, duration, driver_id, driver_name, value } = req.body;
+            const { customer_id, origin, destination, distance, duration, driver, value } = req.body;
 
-            if ([customer_id, origin, destination, duration, driver_name].some((value) => typeof value !== 'string' || value.trim().length === 0)) {
+            if ([customer_id, origin, destination, duration, driver.name].some((value) => typeof value !== 'string' || value.trim().length === 0)) {
                 return res.status(400).json({
                     error_code: "INVALID_DATA",
                     error_description: "Os dados fornecidos no corpo da requisição são inválidos",
                 });
             }
 
-            if ([driver_id, distance, value].some((value) => typeof value !== "number" || value < 0)) {
+            if ([driver.id, distance, value].some((value) => typeof value !== "number" || value < 0)) {
                 return res.status(400).json({
                     error_code: "INVALID_DATA",
                     error_description: "Os dados fornecidos mo corpo da requisição são inválidos",
                 });
             }
 
-            const serviceResponse = await rideService.confirmRide(customer_id, origin, destination, distance, duration, driver_id, driver_name, value);
+            const serviceResponse = await rideService.confirmRide(customer_id, origin, destination, distance, duration, driver.id, driver.name, value);
 
             return res.status(200).json(serviceResponse);
 

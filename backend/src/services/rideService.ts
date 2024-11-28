@@ -52,6 +52,7 @@ class RideService {
                     name: driver.nome,
                     description: driver.descricao,
                     vehicle: driver.carro,
+                    //para permitir escalabilidade defini as avaliações como um Modelo no banco de dados e para esta execução estou pegando apenas a primeria mesmo
                     review: {
                         rating: driver.avaliations[0].rating,
                         comment: driver.avaliations[0].comment,
@@ -196,6 +197,7 @@ class RideService {
                 destination: true,
                 distance: true,
                 value: true,
+                duration: true,
                 driver: {
                     select: {
                         id: true,

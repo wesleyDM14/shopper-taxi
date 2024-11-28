@@ -33,7 +33,7 @@ export const HeaderTitle = styled.h1`
 
 export const MainContent = styled.div`
     display: grid;
-    grid-template-columns: 0.5fr 1.5fr ;
+    grid-template-columns: 0.6fr 1fr ;
 
     @media only screen and (max-width: 978px) {
         display: flex;
@@ -174,10 +174,11 @@ export const DriversOptionsTitleContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 10px;
 `;
 
-export const DriverOptionsTitle = styled.h4``;
+export const DriverOptionsTitle = styled.h4`
+    font-size: 14px;
+`;
 
 export const DriverOptionsCardContainer = styled.div``;
 
@@ -189,6 +190,7 @@ export const DriverOptionsCardItem = styled.div`
     margin-bottom: 10px;
     cursor: pointer;
     transition: all 0.2s;
+    z-index: 9999;
 
     &:hover {
         transform: scale(1.1);
@@ -200,7 +202,7 @@ export const DriverOptionsCardItem = styled.div`
 `;
 
 export const DriverOptionName = styled.h5`
-    font-size: 20px;
+    font-size: 14px;
 `;
 
 export const DriverOptionValue = styled.p`
@@ -218,8 +220,8 @@ export const ResumeContainer = styled.div`
 
 export const ResumeValueArea = styled.div`
     display: flex;
-    margin-top: 15px;
-    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-bottom: 5px;
     margin-right: 15px;
 `;
 
@@ -248,4 +250,80 @@ export const ResumeValueText = styled.p`
     font-size: 14px;
     font-weight: 700;
     color: #000;
+`;
+
+export const ConfirmDriverContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+`;
+
+export const ConfirmDriverIconContainer = styled.div`
+    display: flex;
+
+    svg {
+        font-size: 30px;
+        color: ${props => props.theme.colors.sucess};
+    }
+`;
+
+export const ConfirmDriverText = styled.h5`
+    font-size: 14px;
+    margin-top: 10px;
+`;
+
+export const ConfirmDriverButtonContainer = styled.div`
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+`;
+
+export const ConfirmDriverConfirmButton = styled.button`
+    cursor: pointer;
+    font-weight: 600;
+    border: 1px solid ${props => props.theme.colors.primary};
+    color: ${porps => porps.theme.colors.primary};
+    border-radius: 4px;
+    padding: 8px 12px;
+    min-height: 40px;
+    width: 100px;
+    transition: all .2s ease-out;
+    background-color: ${props => props.theme.colors.dark};
+
+    &:hover{
+        background-color: #0F05;
+        color: #000A;
+    }
+
+    @media only screen and (max-width: 978px) {
+        min-height: 30px;
+        min-width: 60px;
+        font-size: ${props => props.theme.fontsSizes.small};
+    }
+`;
+
+export const ConfirmDriverCancelButton = styled.button`
+    cursor: pointer;
+    font-weight: 600;
+    border: 1px solid ${props => props.theme.colors.dark};
+    color: ${porps => porps.theme.colors.dark};
+    border-radius: 4px;
+    padding: 8px 12px;
+    min-height: 40px;
+    width: 100px;
+    transition: all .2s ease-out;
+    background-color: ${props => props.theme.colors.primary};
+
+    &:hover{
+        background-color: #F005;
+        color: #000A;
+    }
+
+    @media only screen and (max-width: 978px) {
+        min-height: 30px;
+        min-width: 60px;
+        font-size: ${props => props.theme.fontsSizes.small};
+    }
 `;

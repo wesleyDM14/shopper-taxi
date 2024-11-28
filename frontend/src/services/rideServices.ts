@@ -1,8 +1,9 @@
 import axios from "axios";
-import { EstimateRideFormValues } from "../Types/indes";
+import { DriverOption, EstimateRideFormValues, RouteData } from "../Types/indes";
 
 export const estimateRide = async (values: EstimateRideFormValues, setRouteData: (routeData: any) => void, setSubmitting: (isSubmitting: boolean) => void, setFieldError: (field: string, message: string) => void, setCalculateRoute: (value: boolean) => void) => {
-    await axios.post('http://localhost:3333/ride/estimate', values, {
+    const apiUrl = process.env.REACT_APP_API_URL;
+    await axios.post(`${apiUrl}/ride/estimate`, values, {
         headers: {
             'Content-Type': 'application/json',
         }
@@ -10,16 +11,36 @@ export const estimateRide = async (values: EstimateRideFormValues, setRouteData:
         setRouteData(response.data);
         setCalculateRoute(false);
     }).catch((error) => {
-
+        window.alert(error.response.data.error_description);
     }).finally(() => {
         setSubmitting(false);
     });
 }
 
-export const confirmRide = () => {
+export const confirmRide = async (routeData: RouteData, selectedDriver: DriverOption, customer_id: string, origin: string, destination: string, navigate: (path: string) => void) => {
+    const values = {
+        customer_id: customer_id,
+        origin: origin,
+        destination: destination,
+        distance: routeData.distance,
+        duration: routeData.duration,
+        driver: {
+            id: selectedDriver.id,
+            name: selectedDriver.name,
+        },
+        value: selectedDriver.value,
+    };
 
-}
+    const apiUrl = process.env.REACT_APP_API_URL;
 
-export const getRidesByCustomerId = () => {
-
+    await axios.patch(`${apiUrl}/ride/confirm`, values, {
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    }).then((response) => {
+        console.log(response);
+        navigate(`/history?customer_id=${customer_id}`);
+    }).catch((error) => {
+        console.log(error);
+    });
 }

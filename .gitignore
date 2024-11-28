@@ -16,7 +16,9 @@ build/
 dist/
 
 # Arquivos Prisma
-/backend/prisma/migrations/*
+/backend/prisma/migrations
+
+/backend/coverage
 
 # Front e Back
 /frontend/node_modules

@@ -3,6 +3,7 @@ import request from "supertest";
 import app from "../server/app";
 
 describe('POST /ride/estimate', () => {
+    
     //Teste de sucesso para as 3 opções de motoristas
     it('Esperado status 200 e retornar as estimativas da viagem', async () => {
         const response = await request(app).post('/ride/estimate')

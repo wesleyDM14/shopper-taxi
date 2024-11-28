@@ -1,33 +1,41 @@
 version: '3.8'
 services:
+
   backend:
-    build: ./backend
+    build: 
+      context: ./backend
+      args:
+        DATABASE_URL: postgresql://postgres:postgres@postgres:5432/shopper_taxi
     ports:
-      - "${BACKEND_PORT:-8000}:${BACKEND_PORT:-8000}"
-    env_file:
-      - .env
-    environment:
-      - PORT=${BACKEND_PORT}
-      - DATABASE_URL=${DATABASE_URL}
+      - "8080:8080"
     depends_on:
       - postgres
+    environment:
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/shopper_taxi
+    command: sh -c "yarn install && npx prisma migrate deploy && yarn seed && yarn dev"
+    restart: always
+
   frontend:
     build: ./frontend
     ports:
-      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
-    env_file:
-      - .env
+      - "80:80"
     environment:
-      - PORT=${FRONTEND_PORT}
+      REACT_APP_API_URL: "http://backend:8080"
+      REACT_APP_GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+    depends_on:
+      - backend
+
   postgres:
     image: postgres
     container_name: postgres
+    restart: always
     ports:
-      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+      - "5432:5432"
     environment:
-      POSTGRES_USER: "${DATABASE_USER}"
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_DB: "${DATABASE_DATABASE}"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: shopper_taxi
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

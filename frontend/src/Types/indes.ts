@@ -58,3 +58,7 @@ export interface SidebarProps {
     closeSidebar: () => void;
     navigate: (path: string) => void;
 }
+
+export interface EstimateProps {
+    navigate: (path: string) => void;
+}
