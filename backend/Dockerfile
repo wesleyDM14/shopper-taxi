@@ -17,7 +17,7 @@ RUN yarn install
 COPY . .
 
 # Garantindo que o wait-for-it.sh tenha permissão de execução
-RUN chmod +x ./wait-for-it.sh
+RUN ./wait-for-it.sh postgres:5432 -- npx prisma migrate dev --name init
 
 # Gera o Prisma Client
 RUN npx prisma generate
