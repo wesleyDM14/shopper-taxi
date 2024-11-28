@@ -33,4 +33,4 @@ EXPOSE 8080
 
 # Comando para iniciar o servidor
 #CMD ["yarn", "dev"]
-CMD ./wait-for-it.sh postgres:5432 -- npx prisma migrate deploy && yarn seed && yarn dev
+CMD ./wait-for-it.sh postgres:5432 --timeout=60 -- npx prisma migrate deploy && yarn seed && yarn dev
