@@ -10,18 +10,26 @@ services:
       - "8080:8080"
     depends_on:
       - postgres
+    env_file:
+      - ./.env
     environment:
       GOOGLE_API_KEY: ${GOOGLE_API_KEY}
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/shopper_taxi
-    command: sh -c "yarn install && npx prisma migrate deploy && yarn seed && yarn dev"
+      PORT: 8080
+    command: sh -c "./migrate.sh"
     restart: always
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        REACT_APP_API_URL: http://backend:8080
     ports:
       - "80:80"
+    env_file:
+      - ./.env
     environment:
-      REACT_APP_API_URL: "http://backend:8080"
+      REACT_APP_API_URL: http://backend:8080
       REACT_APP_GOOGLE_API_KEY: ${GOOGLE_API_KEY}
     depends_on:
       - backend

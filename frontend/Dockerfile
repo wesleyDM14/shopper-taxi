@@ -1,6 +1,9 @@
 # Imagem base para o frontend (Node.js)
 FROM node:22 as build
 
+ARG REACT_APP_API_URL
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
+
 # Definindo o diretório de trabalho dentro do container
 WORKDIR /app
 

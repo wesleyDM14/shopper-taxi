@@ -15,7 +15,7 @@ COPY package*.json yarn.lock ./
 RUN yarn install
 
 # Copiando o restante dos arquivos da aplicação
-COPY . .
+COPY . ./
 
 # Garantindo que o wait-for-it.sh tenha permissão de execução
 RUN chmod +x ./wait-for-it.sh
@@ -26,5 +26,5 @@ RUN npx prisma generate
 # Expondo a porta que o backend vai rodar
 EXPOSE 8080
 
-# Comando para garantir que o banco de dados esteja pronto, aplicar migrações e rodar a aplicação
-CMD ./wait-for-it.sh postgres:5432 --timeout=60 -- npx prisma migrate dev --name init && yarn seed && yarn dev
+# Comando de execução que vai rodar o script de migração e rodar o servidor
+CMD ./wait-for-it.sh postgres:5432 --timeout=60 -- sh -c "./migrate.sh"

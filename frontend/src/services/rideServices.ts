@@ -3,6 +3,7 @@ import { DriverOption, EstimateRideFormValues, RouteData } from "../Types/indes"
 
 export const estimateRide = async (values: EstimateRideFormValues, setRouteData: (routeData: any) => void, setSubmitting: (isSubmitting: boolean) => void, setFieldError: (field: string, message: string) => void, setCalculateRoute: (value: boolean) => void) => {
     const apiUrl = process.env.REACT_APP_API_URL;
+    console.log(apiUrl);
     await axios.post(`${apiUrl}/ride/estimate`, values, {
         headers: {
             'Content-Type': 'application/json',
@@ -11,6 +12,7 @@ export const estimateRide = async (values: EstimateRideFormValues, setRouteData:
         setRouteData(response.data);
         setCalculateRoute(false);
     }).catch((error) => {
+        console.error(error);
         window.alert(error.response.data.error_description);
     }).finally(() => {
         setSubmitting(false);
@@ -42,5 +44,6 @@ export const confirmRide = async (routeData: RouteData, selectedDriver: DriverOp
         navigate(`/history?customer_id=${customer_id}`);
     }).catch((error) => {
         console.log(error);
+        window.alert(error.data.error_description);
     });
 }

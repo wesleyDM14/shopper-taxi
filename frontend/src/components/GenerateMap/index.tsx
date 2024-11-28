@@ -7,10 +7,10 @@ import { TbApiOff } from 'react-icons/tb';
 
 const GenerateMap: React.FC<{ routeData: RouteData }> = ({ routeData }) => {
 
-    const apiKey = process.env.GOOGLE_APY_KEY || "AIzaSyC1Ju4-uM9T2w5TvPhL2Wue3XWXKFrvOh8";
+    const apiKey = process.env.GOOGLE_APY_KEY;
 
     const { isLoaded } = useLoadScript({
-        googleMapsApiKey: apiKey,
+        googleMapsApiKey: apiKey!,
     });
 
     const [map, setMap] = useState<google.maps.Map | null>(null);
